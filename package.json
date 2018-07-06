@@ -1,12 +1,12 @@
 {
-  "name": "mongoose-autofresh",
-  "version": "0.1.0",
+  "name": "mongoose-autorefresh",
+  "version": "0.2.0",
   "description": "mongoose plugin to ensure fresh refs",
   "keywords": [
     "lykmapipo",
     "mongoose",
     "mongoose-plugin",
-    "mongoose-autofresh",
+    "mongoose-autorefresh",
     "fresh",
     "refs",
     "relation"
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lykmapipo/mongoose-autofresh.git"
+    "url": "https://github.com/lykmapipo/mongoose-autorefresh.git"
   },
   "author": {
     "name": "lykmapipo",
@@ -26,9 +26,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lykmapipo/mongoose-autofresh/issues"
+    "url": "https://github.com/lykmapipo/mongoose-autorefresh/issues"
   },
-  "homepage": "https://github.com/lykmapipo/mongoose-autofresh",
+  "homepage": "https://github.com/lykmapipo/mongoose-autorefresh",
   "contributors": [
     {
       "name": "lykmapipo",

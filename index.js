@@ -26,7 +26,7 @@
 const _ = require('lodash');
 
 
-module.exports = exports = function autofreshPlugin(schema /*, options*/ ) {
+module.exports = exports = function autorefreshPlugin(schema /*, options*/ ) {
 
 
   /* collect refs for autorefresh */
