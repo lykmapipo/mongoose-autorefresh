@@ -40,10 +40,11 @@ person.pre('save', function(next) {
     expect(instance.father.name).to.exist;
 });
 
-//or
+
+//OR
 
 
-//force refs autorefresh
+//force refs autorefresh anywhere when you want them
 person.autorefresh(function(error, instance) {
     expect(instance.father).to.exist;
     expect(instance.father.name).to.exist;
