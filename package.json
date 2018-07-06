@@ -1,0 +1,53 @@
+{
+  "name": "mongoose-autofresh",
+  "version": "0.1.0",
+  "description": "mongoose plugin to ensure fresh refs",
+  "keywords": [
+    "lykmapipo",
+    "mongoose",
+    "mongoose-plugin",
+    "mongoose-autofresh",
+    "fresh",
+    "refs",
+    "relation"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lykmapipo/mongoose-autofresh.git"
+  },
+  "author": {
+    "name": "lykmapipo",
+    "email": "lallyelias87@gmail.com",
+    "url": "https://github.com/lykmapipo"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lykmapipo/mongoose-autofresh/issues"
+  },
+  "homepage": "https://github.com/lykmapipo/mongoose-autofresh",
+  "contributors": [
+    {
+      "name": "lykmapipo",
+      "github": "https://github.com/lykmapipo"
+    }
+  ],
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "faker": "^4.1.0",
+    "grunt": "^1.0.3",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-mocha-test": "^0.13.3",
+    "jshint-stylish": "^2.2.1",
+    "mocha": "^5.2.0",
+    "mongoose": "^5.2.1"
+  },
+  "dependencies": {
+    "async": "^2.6.1",
+    "lodash": "^4.17.10"
+  }
+}
