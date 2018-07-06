@@ -24,13 +24,30 @@ const autorefresh = require('mongoose-autorefresh');
 const Schema = mongoose.Schema;
 
 const PersonSchema = new Schema({
-    parent: {
+    father: {
         type: ObjectId,
         ref: 'Person',
         autorefresh: true
     }
 });
 PersonSchema.plugin(autorefresh);
+
+...
+
+//all logics/hooks after pre validate will have fresh loaded refs i.e father
+person.pre('save', function(next) {
+    expect(instance.father).to.exist;
+    expect(instance.father.name).to.exist;
+});
+
+//or
+
+
+//force refs autorefresh
+person.autorefresh(function(error, instance) {
+    expect(instance.father).to.exist;
+    expect(instance.father.name).to.exist;
+});
 
 ...
 
