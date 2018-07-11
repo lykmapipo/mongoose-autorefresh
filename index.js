@@ -24,6 +24,7 @@
 
 /* dependencies */
 const _ = require('lodash');
+const defaults = { options: { maxDepth: 1 } };
 
 
 module.exports = exports = function autorefreshPlugin(schema /*, options*/ ) {
@@ -43,7 +44,21 @@ module.exports = exports = function autorefreshPlugin(schema /*, options*/ ) {
    * @param {SchemaType} schemaType valid mongoose schema type
    * @private
    */
-  function autorefreshPaths(schemaPath, schemaType) {
+  function autorefreshPaths(schemaPath, schemaType, parent) {
+
+    //update pathe
+    const actualSchemaPath =
+      _.compact([(parent || {}).schemaPath, schemaPath]).join('.');
+
+    //handle schema
+    if (schemaType.schema) {
+      schemaType.schema.eachPath(function (_schemaPath, _schemaType) {
+        autorefreshPaths(
+          _schemaPath, _schemaType,
+          ({ schemaPath: schemaPath, schemaType: schemaType })
+        );
+      });
+    }
 
     //ensure schema type has options
     const hasOptions = _.has(schemaType, 'options');
@@ -57,15 +72,20 @@ module.exports = exports = function autorefreshPlugin(schema /*, options*/ ) {
     //check if is allowed autorefresh schema type
     const refreshable = hasOptions && hasRef && autorefreshable;
 
-    //handle `autorefresh:true` schema options
+    //handle `autorefresh:boolean|object` schema options
     if (refreshable) {
 
       //obtain schema type ref & autorefresh options
       const { ref, autorefresh } = schemaType.options;
 
+      //prepare refreshable options
+      let options = _.merge({}, { path: actualSchemaPath, ref: ref });
+      if (_.isPlainObject(autorefresh)) {
+        options = _.merge({}, defaults, options, autorefresh);
+      }
+
       //add model exists async validation
-      refs[schemaPath] =
-        ({ path: schemaPath, ref: ref, autorefresh: autorefresh });
+      refs[actualSchemaPath] = _.merge({}, options);
 
     }
 
@@ -89,10 +109,7 @@ module.exports = exports = function autorefreshPlugin(schema /*, options*/ ) {
 
     //prepare population options
     _.forEach(_.merge({}, refs), function (ref) {
-      if (_.isPlainObject(ref.fresh)) {
-        ref = _.merge({}, ref, ref.fresh);
-      }
-      delete ref.fresh;
+      ref = _.merge({}, ref);
       $refs = [].concat($refs).concat(ref);
     });
 

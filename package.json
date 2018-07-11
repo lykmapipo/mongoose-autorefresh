@@ -1,6 +1,6 @@
 {
   "name": "mongoose-autorefresh",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "mongoose plugin to ensure fresh refs",
   "keywords": [
     "lykmapipo",
@@ -44,7 +44,7 @@
     "grunt-mocha-test": "^0.13.3",
     "jshint-stylish": "^2.2.1",
     "mocha": "^5.2.0",
-    "mongoose": "^5.2.1"
+    "mongoose": "^5.2.3"
   },
   "dependencies": {
     "async": "^2.6.1",

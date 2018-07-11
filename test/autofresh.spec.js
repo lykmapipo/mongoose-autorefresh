@@ -11,27 +11,27 @@ const faker = require('faker');
 const expect = require('chai').expect;
 
 
-/* test model */
+/* test models */
+const FriendSchema = new Schema({
+  type: { type: String },
+  person: { type: ObjectId, ref: 'Person', autorefresh: true }
+});
 const PersonSchema = new Schema({
-  name: {
-    type: String
-  },
-  father: {
-    type: ObjectId,
-    ref: 'Person',
-    autorefresh: true
-  },
-  mother: {
-    type: ObjectId,
-    ref: 'Person',
-    autorefresh: true
-  },
+  name: { type: String },
+  phone: { type: String },
+  father: { type: ObjectId, ref: 'Person', autorefresh: true },
+  mother: { type: ObjectId, ref: 'Person', autorefresh: true },
   relatives: {
     type: [ObjectId],
     ref: 'Person',
     default: undefined,
-    autorefresh: true
-  }
+    autorefresh: { select: { name: 1 } }
+  },
+  friends: {
+    type: [FriendSchema],
+    default: undefined
+  },
+  neighbours: [FriendSchema]
 });
 PersonSchema.plugin(require(path.join(__dirname, '..')));
 const Person = mongoose.model('Person', PersonSchema);
@@ -40,17 +40,37 @@ const Person = mongoose.model('Person', PersonSchema);
 describe('mongoose-autorefresh', function () {
 
   let father = {
-    name: faker.name.findName()
+    name: faker.name.findName(),
+    phone: faker.phone.phoneNumber()
   };
 
   let mother = {
-    name: faker.name.findName()
+    name: faker.name.findName(),
+    phone: faker.phone.phoneNumber()
   };
 
   let relatives = [{
-    name: faker.name.findName()
+    name: faker.name.findName(),
+    phone: faker.phone.phoneNumber()
   }, {
-    name: faker.name.findName()
+    name: faker.name.findName(),
+    phone: faker.phone.phoneNumber()
+  }];
+
+  let friends = [{
+    name: faker.name.findName(),
+    phone: faker.phone.phoneNumber()
+  }, {
+    name: faker.name.findName(),
+    phone: faker.phone.phoneNumber()
+  }];
+
+  let neighbours = [{
+    name: faker.name.findName(),
+    phone: faker.phone.phoneNumber()
+  }, {
+    name: faker.name.findName(),
+    phone: faker.phone.phoneNumber()
   }];
 
 
@@ -66,6 +86,31 @@ describe('mongoose-autorefresh', function () {
   before(function (done) {
     Person.insertMany(relatives, function (error, created) {
       relatives = created;
+      done(error, created);
+    });
+  });
+
+
+  before(function (done) {
+    Person.insertMany(friends, function (error, created) {
+      friends = _.map(created, function (friend) {
+        return {
+          type: faker.hacker.ingverb(),
+          person: friend._id
+        };
+      });
+      done(error, created);
+    });
+  });
+
+  before(function (done) {
+    Person.insertMany(neighbours, function (error, created) {
+      neighbours = _.map(created, function (neighbour) {
+        return {
+          type: faker.hacker.ingverb(),
+          person: neighbour._id
+        };
+      });
       done(error, created);
     });
   });
@@ -89,7 +134,9 @@ describe('mongoose-autorefresh', function () {
       name: faker.name.findName(),
       father: father,
       mother: mother._id,
-      relatives: _.map(relatives, '_id')
+      relatives: _.map(relatives, '_id'),
+      friends: friends,
+      neighbours: neighbours
     });
 
     person.autorefresh(function (error, instance) {
@@ -104,9 +151,11 @@ describe('mongoose-autorefresh', function () {
       expect(instance.mother.name).to.be.eql(mother.name);
 
       expect(instance.relatives[0].name).to.exist;
+      expect(instance.relatives[0].phone).to.not.exist;
       expect(instance.relatives[0].name).to.be.eql(relatives[0].name);
 
       expect(instance.relatives[1].name).to.exist;
+      expect(instance.relatives[1].phone).to.not.exist;
       expect(instance.relatives[1].name).to.be.eql(relatives[1].name);
 
       done(error, instance);
@@ -122,7 +171,9 @@ describe('mongoose-autorefresh', function () {
       name: faker.name.findName(),
       father: father,
       mother: mother._id,
-      relatives: _.map(relatives, '_id')
+      relatives: _.map(relatives, '_id'),
+      friends: friends,
+      neighbours: neighbours
     });
 
     person.validate(function (error) {
@@ -154,7 +205,9 @@ describe('mongoose-autorefresh', function () {
       name: faker.name.findName(),
       father: father,
       mother: mother._id,
-      relatives: _.map(relatives, '_id')
+      relatives: _.map(relatives, '_id'),
+      friends: friends,
+      neighbours: neighbours
     });
 
     person.save(function (error, saved) {
