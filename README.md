@@ -1,4 +1,4 @@
-# mongoose-autorefresh
+# mongoose-autorefresh(DEPRECATED) - [Use mongoose-exists](https://github.com/lykmapipo/mongoose-exists)
 
 [![Build Status](https://travis-ci.org/lykmapipo/mongoose-autorefresh.svg?branch=master)](https://travis-ci.org/lykmapipo/mongoose-autorefresh)
 [![Dependency Status](https://img.shields.io/david/lykmapipo/mongoose-autorefresh.svg?style=flat)](https://david-dm.org/lykmapipo/mongoose-autorefresh)
